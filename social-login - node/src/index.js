@@ -24,4 +24,12 @@ app.post('/signin/facebook', async (req, res) => {
   } catch (error) {}
 })
 
+app.post('/signin/google', async (req, res) => {
+  console.log('Request -->', req.body.user)
+
+  try {
+    // Handle user as appropriate --> signup(new user) / signin(existing user)
+  } catch (error) {}
+})
+
 app.listen(4000, () => console.log('Server started'))
