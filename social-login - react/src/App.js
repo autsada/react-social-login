@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import FacebookLogin from 'react-facebook-login'
 import GoogleLogin from 'react-google-login'
 import axios from 'axios'
@@ -6,7 +6,12 @@ import axios from 'axios'
 import './App.css'
 
 function App() {
-  const signUserIn = async response => {
+  useEffect(() => {
+    if ((window.location.hash = '/#_=_')) {
+      window.location.hash = ''
+    }
+  })
+  const signUserIn = async (response) => {
     console.log('Res -->', response)
     const { name, email, accessToken, userID } = response
     const user = { name, email, accessToken, userId: userID }
@@ -15,16 +20,16 @@ function App() {
       method: 'post',
       url: 'http://localhost:4000/signin/facebook',
       data: {
-        user
-      }
+        user,
+      },
     })
   }
 
-  const signinWithGoogle = async response => {
+  const signinWithGoogle = async (response) => {
     console.log('Res -->', response)
     const {
       tokenObj: { access_token },
-      profileObj: { googleId, email, name }
+      profileObj: { googleId, email, name },
     } = response
     const user = { name, email, accessToken: access_token, userId: googleId }
 
@@ -32,8 +37,8 @@ function App() {
       method: 'post',
       url: 'http://localhost:4000/signin/google',
       data: {
-        user
-      }
+        user,
+      },
     })
   }
 
@@ -57,6 +62,29 @@ function App() {
           onFailure={signinWithGoogle}
           cookiePolicy={'single_host_origin'}
         />
+      </div>
+
+      <br />
+      <br />
+
+      <div>
+        <button
+          style={{
+            background: 'blue',
+            fontSize: '18px',
+            border: 'none',
+            color: 'white',
+            cursor: 'pointer',
+            padding: '10px 20px',
+          }}
+        >
+          <a
+            style={{ color: 'white', textDecoration: 'none' }}
+            href='http://localhost:4000/auth/facebook'
+          >
+            Login with Facebook
+          </a>
+        </button>
       </div>
     </div>
   )
