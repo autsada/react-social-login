@@ -6,11 +6,12 @@ import axios from 'axios'
 import './App.css'
 
 function App() {
-  useEffect(() => {
-    if ((window.location.hash = '/#_=_')) {
-      window.location.hash = ''
-    }
-  })
+  // useEffect(() => {
+  //   if ((window.location.hash = '/#_=_')) {
+  //     window.location.hash = ''
+  //   }
+  // })
+
   const signUserIn = async (response) => {
     console.log('Res -->', response)
     const { name, email, accessToken, userID } = response
@@ -83,6 +84,26 @@ function App() {
             href='http://localhost:4000/auth/facebook'
           >
             Login with Facebook
+          </a>
+        </button>
+      </div>
+      <br />
+      <div>
+        <button
+          style={{
+            background: 'red',
+            fontSize: '18px',
+            border: 'none',
+            color: 'white',
+            cursor: 'pointer',
+            padding: '10px 20px',
+          }}
+        >
+          <a
+            style={{ color: 'white', textDecoration: 'none' }}
+            href='http://localhost:4000/auth/google'
+          >
+            Login with Google
           </a>
         </button>
       </div>
