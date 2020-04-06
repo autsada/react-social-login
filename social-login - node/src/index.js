@@ -2,30 +2,11 @@ const express = require('express')
 const cors = require('cors')
 const bodyParser = require('body-parser')
 const passport = require('passport')
-const FacebookStrategy = require('passport-facebook').Strategy
-// const axios = require('axios')
 
-passport.use(
-  new FacebookStrategy(
-    {
-      clientID: 'YOUR_FACEBOOK_CLIENTID',
-      clientSecret: 'YOUR_FACEBOOK_SECRETID',
-      callbackURL: 'http://localhost:4000/auth/facebook/callback',
-      profileFields: ['id', 'displayName', 'name', 'email'],
-      passReqToCallback: true,
-    },
-    function (req, accessToken, refreshToken, profile, done) {
-      try {
-        if (profile) {
-          req.user = profile
-          done(null, profile)
-        }
-      } catch (error) {
-        done(error)
-      }
-    }
-  )
-)
+const { facebookPassportConfig, googlePassportConfig } = require('./passport')
+
+facebookPassportConfig()
+googlePassportConfig()
 
 const app = express()
 app.use(cors())
@@ -65,6 +46,24 @@ app.get(
     failureRedirect: 'http://localhost:3000',
   }),
   (req, res) => {
+    const user = req.user
+    // Handle user with database --> new user (sign up --> create new user) / signin
+    // Send jwt token back to frontend --> response / res.cookies
+
+    res.redirect('http://localhost:3000')
+  }
+)
+
+app.get('/auth/google', passport.authenticate('google', { scope: ['profile'] }))
+
+app.get(
+  '/auth/google/callback',
+  passport.authenticate('google', {
+    session: false,
+    failureRedirect: 'http://localhost:3000',
+  }),
+  (req, res) => {
+    console.log('User -->', req.user)
     const user = req.user
     // Handle user with database --> new user (sign up --> create new user) / signin
     // Send jwt token back to frontend --> response / res.cookies
